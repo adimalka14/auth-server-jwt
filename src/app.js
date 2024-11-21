@@ -4,6 +4,7 @@ const path = require('path');
 const helmet = require('helmet');
 const cors = require('cors');
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 
 const { initAppRouters } = require('./routes/index');
 const { generalLimiterMW } = require('./middlewares/rateLimit.mw');
@@ -14,6 +15,7 @@ const app = express();
 
 app.use(cors());
 app.use(helmet());
+app.use(cookieParser());
 app.use(compression());
 app.use(generalLimiterMW);
 app.use(bodyParser.json());

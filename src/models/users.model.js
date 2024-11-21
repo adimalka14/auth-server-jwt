@@ -14,10 +14,6 @@ const userSchema = new Schema(
             required: [true, 'you must provide a password'],
             minlength: 4,
         },
-        saltRounds: {
-            type: Number,
-            default: 10,
-        },
     },
     { timestamps: true }
 );
@@ -38,4 +34,6 @@ userSchema.pre('save', async function (next) {
     }
 });
 
-module.exports.UsersModel = model('User', userSchema);
+const userModel = model('User', userSchema);
+
+module.exports = userModel;

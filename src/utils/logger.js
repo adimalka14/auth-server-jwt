@@ -1,6 +1,6 @@
 const winston = require('winston');
 const winstonDailyRotateFile = require('winston-daily-rotate-file');
-
+const { v4: uuidv4 } = require('uuid');
 const { LOGGING_MODE, LOGGING_LINE_TRACE, LOG_DIR_PATH } = require('./env-var');
 
 const LEVELS = {
@@ -15,9 +15,7 @@ const LEVELS = {
 
 function stringifyMetaData(metadata = '') {
     if (!metadata || typeof metadata === 'string') return metadata;
-    return Object.keys(metadata).length
-        ? `\n\t${JSON.stringify(metadata, null, 2)}`
-        : '';
+    return Object.keys(metadata).length ? `\n\t${JSON.stringify(metadata, null, 2)}` : '';
 }
 
 class Logger {
@@ -34,30 +32,16 @@ class Logger {
             maxFiles: '14d',
             level: LOGGING_MODE,
         });
-        transportDailyRotateFile.on(
-            'rotate',
-            function (oldFileName, newFileName) {}
-        );
+        transportDailyRotateFile.on('rotate', function (oldFileName, newFileName) {});
         this.#logger = winston.createLogger({
-            transports: [
-                transportDailyRotateFile,
-                new winston.transports.Console({ level: LOGGING_MODE }),
-            ],
+            transports: [transportDailyRotateFile, new winston.transports.Console({ level: LOGGING_MODE })],
             format: winston.format.combine(
                 winston.format.colorize(),
                 winston.format.timestamp(),
                 winston.format.splat(),
-                winston.format.printf(
-                    ({
-                        timestamp,
-                        level,
-                        request_id,
-                        message,
-                        ...metadata
-                    }) => {
-                        return `${timestamp} [${level}] [${request_id}] ${message} ${stringifyMetaData(metadata)}`;
-                    }
-                )
+                winston.format.printf(({ timestamp, level, request_id, message, ...metadata }) => {
+                    return `${timestamp} [${level}] [${request_id}] ${message} ${stringifyMetaData(metadata)}`;
+                })
             ),
         });
 
@@ -75,9 +59,7 @@ class Logger {
 
         if (!traceLine) return undefined;
 
-        const match =
-            traceLine.match(/\((.*):(\d+):(\d+)\)/) ||
-            traceLine.match(/at (.*):(\d+):(\d+)/);
+        const match = traceLine.match(/\((.*):(\d+):(\d+)\)/) || traceLine.match(/at (.*):(\d+):(\d+)/);
 
         if (!match) return undefined;
 
@@ -93,10 +75,7 @@ class Logger {
         }
 
         let lineTrace;
-        if (
-            Array.isArray(LOGGING_LINE_TRACE) &&
-            (LOGGING_LINE_TRACE.includes(level) || level === LEVELS.error)
-        ) {
+        if (Array.isArray(LOGGING_LINE_TRACE) && (LOGGING_LINE_TRACE.includes(level) || level === LEVELS.error)) {
             const error = new Error(message);
             lineTrace = this.#getLineTrace(error);
         }
@@ -105,35 +84,36 @@ class Logger {
             options.lineTrace = lineTrace;
         }
 
-        this.#logger.log(level, message, { request_id, ...options });
+        const log_id = uuidv4();
+        this.#logger.log(level, message, { log_id, ...options });
     }
 
-    error(request_id, message, metadata = {}) {
-        this.writeLog(LEVELS.error, request_id, message, metadata);
+    error(message, metadata = {}) {
+        this.writeLog(LEVELS.error, message, metadata);
     }
 
-    warn(request_id, message, metadata = {}) {
-        this.writeLog(LEVELS.warning, request_id, message, metadata);
+    warn(message, metadata = {}) {
+        this.writeLog(LEVELS.warning, message, metadata);
     }
 
-    info(request_id, message, metadata = {}) {
-        this.writeLog(LEVELS.info, request_id, message, metadata);
+    info(message, metadata = {}) {
+        this.writeLog(LEVELS.info, message, metadata);
     }
 
-    debug(request_id, message, metadata = {}) {
-        this.writeLog(LEVELS.debug, request_id, message, metadata);
+    debug(message, metadata = {}) {
+        this.writeLog(LEVELS.debug, message, metadata);
     }
 
-    verbose(request_id, message, metadata = {}) {
-        this.writeLog(LEVELS.verbose, request_id, message, metadata);
+    verbose(message, metadata = {}) {
+        this.writeLog(LEVELS.verbose, message, metadata);
     }
 
-    userAction(request_id, message, metadata = {}) {
-        this.writeLog(LEVELS.userAction, request_id, message, metadata);
+    userAction(message, metadata = {}) {
+        this.writeLog(LEVELS.userAction, message, metadata);
     }
 
-    silly(request_id, message, metadata = {}) {
-        this.writeLog(LEVELS.silly, request_id, message, metadata);
+    silly(message, metadata = {}) {
+        this.writeLog(LEVELS.silly, message, metadata);
     }
 }
 
