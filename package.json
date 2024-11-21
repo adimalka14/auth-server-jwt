@@ -32,6 +32,8 @@
     "jest-html-reporters": "^3.1.7",
     "nodemon": "^3.1.4",
     "prettier": "^3.3.3",
-    "supertest": "^7.0.0"
+    "supertest": "^7.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }
