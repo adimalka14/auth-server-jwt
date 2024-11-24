@@ -60,12 +60,35 @@ Below is an example of how HttpOnly cookies behave in the browser console:
 
 #### Without HttpOnly
 In this scenario, cookies can be accessed via JavaScript, exposing them to potential attacks:
-![Cookie without HttpOnly](docs/images/httpOnly - cookie.png)
+![Cookie without HttpOnly](docs/images/httpOnly-false.png)
+![Cookie without HttpOnly](docs/images/cookie.png)
 
 #### With HttpOnly
 When HttpOnly is enabled, cookies are not accessible via JavaScript, providing better security:
-![Cookie with HttpOnly](path/to/your/image2.png)
+![Cookie with HttpOnly](docs/images/httpOnly-true.png)
+![Cookie witt HttpOnly](docs/images/httpOnly-cookie.png)
 
+### Cross-Origin Resource Sharing (CORS)
+CORS (Cross-Origin Resource Sharing) is a security mechanism that controls how resources on the server are accessed by clients from different domains. By default, browsers block cross-origin requests for security reasons.
+
+In this project:
+- **CORS is enabled globally** to allow requests from any origin during development.
+- For production, you can restrict access to specific domains by configuring the `origin` option in the `cors` middleware.
+
+#### Example
+Here is how CORS is configured in this project:
+```javascript
+const cors = require('cors');
+
+// Enable CORS for all origins during development
+app.use(cors());
+
+// Example for restricting access in production:
+app.use(cors({
+  origin: 'https://yourdomain.com', // Replace with your UI domain
+  credentials: true, // Allow cookies to be sent
+}));
+```
 ---
 
 ## Installation
@@ -75,35 +98,23 @@ When HttpOnly is enabled, cookies are not accessible via JavaScript, providing b
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/adimalka14/dog-adapters.git
-   cd dog-adapters
+   git clone https://github.com/adimalka14/auth-server-jwt.git
+   cd auth-server-jwt
 
 2. Install dependencies:
 
    ```bash
    npm install
-3. Run the application:
-- build of typescript and run js compiled project
-   ```bash
-    npm run build
-   ```
+3. Run the application: 
     ```bash
     npm run start
-
-- or runs typescript code for development with nodemon
-   ```bash
-    npm run dev
-      
 
 The app will run on http://localhost:3000.
 
 ---
 ---
 ## Testing
-The project includes tests for key functionalities, including:
-- User authentication and session management.
-- CRUD operations for users and dogs.
-- Validation and error handling.
+The project includes End-to-End tests that validate the complete flow of authentication, including registration, login, logout, and token refresh functionality. These tests ensure that the system behaves as expected from the perspective of a client interacting with the API.
   
  To run the tests:
 
@@ -112,26 +123,24 @@ The project includes tests for key functionalities, including:
 ```
 ### Test Coverage
 The current test coverage for the project is as follows:
-![צילום מסך 2024-11-21 183724](https://github.com/user-attachments/assets/e640a60c-c6ff-4bdd-8c34-a9eb699053cc)
+
+## Postman Documentation
+
+You can find the Postman collection for this project [here](docs/postman/jwtserver.postman_collection.json).
+
+To use it:
+1. Download the JSON file.
+2. Import it into Postman by selecting `Import` and uploading the file.
+3. Use the predefined requests to interact with the API.
+
 
 ## API Documentation
 
 The API is fully documented and available via **Swagger**.  
-To explore and test the API endpoints:
-
-1. Start the server:
-   ```bash
-   npm start
-2. Open your browser and navigate to:
-   ```bash
-   http://localhost:3000/api-docs
-*(Replace `localhost` and the port with your server's host and port if different.)*
 
 #### This documentation provides an interactive interface for testing and exploring all available endpoints.
 ## Swagger Preview
 
-Below is a preview of the Swagger API documentation:
-
 <div style="max-height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;">
-    <img src="swagger-full-page.png" alt="Swagger API Documentation" style="width: 100%;">
+    <img src="docs/images/api-docs.png" alt="Swagger API Documentation" style="width: 100%;">
 </div>
