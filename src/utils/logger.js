@@ -14,8 +14,13 @@ const LEVELS = {
 };
 
 function stringifyMetaData(metadata = '') {
-    if (!metadata || typeof metadata === 'string') return metadata;
-    return Object.keys(metadata).length ? `\n\t${JSON.stringify(metadata, null, 2)}` : '';
+    if (typeof metadata === 'string' || typeof metadata === 'number') {
+        return `\n\t${metadata}`;
+    }
+    if (metadata && typeof metadata === 'object' && Object.keys(metadata).length) {
+        return `\n\t${JSON.stringify(metadata, null, 2)}`;
+    }
+    return '';
 }
 
 class Logger {
@@ -68,10 +73,9 @@ class Logger {
         return `File: ${filePath}, Line: ${line}, Column: ${column}`;
     }
 
-    writeLog(level, request_id, message, options = {}) {
-        if (typeof options === 'object') {
-            options.$message = options.message || null; // Optional chaining
-            delete options.message;
+    writeLog(level, message, options = {}) {
+        if (typeof options !== 'object' || Array.isArray(options)) {
+            options = { metadata: options };
         }
 
         let lineTrace;
@@ -121,4 +125,4 @@ const logger = new Logger();
 module.exports = logger;
 
 // print the first log with the current logging mode
-logger[LOGGING_MODE]('LOGGER', 'logger instance created', { LOGGING_MODE });
+logger[LOGGING_MODE]('logger instance created', { LOGGING_MODE });
