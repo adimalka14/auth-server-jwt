@@ -60,7 +60,7 @@ Below is an example of how HttpOnly cookies behave in the browser console:
 
 #### Without HttpOnly
 In this scenario, cookies can be accessed via JavaScript, exposing them to potential attacks:
-![Cookie without HttpOnly](path/to/your/image1.png)
+![Cookie without HttpOnly](docs/images/httpOnly - cookie.png)
 
 #### With HttpOnly
 When HttpOnly is enabled, cookies are not accessible via JavaScript, providing better security:
