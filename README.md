@@ -65,7 +65,7 @@ In this scenario, cookies can be accessed via JavaScript, exposing them to poten
 
 #### With HttpOnly
 When HttpOnly is enabled, cookies are not accessible via JavaScript, providing better security:
-![Cookie with HttpOnly](docs/images/httpOnly-true.png)
+![Cookie with HttpOnly](docs/images/httpOnly-True.png)
 ![Cookie witt HttpOnly](docs/images/httpOnly-cookie.png)
 
 ### Cross-Origin Resource Sharing (CORS)
