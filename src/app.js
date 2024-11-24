@@ -17,6 +17,9 @@ const { NODE_ENV } = require('./utils/env-var');
 
 const app = express();
 
+// Enable CORS for all origins (suitable for development).
+// To restrict access in production, specify allowed domains in the 'origin' option.
+// Example: app.use(cors({ origin: 'https://yourdomain.com' }));
 app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
