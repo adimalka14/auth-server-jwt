@@ -142,5 +142,5 @@ The API is fully documented and available via **Swagger**.
 ## Swagger Preview
 
 <div style="max-height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;">
-    <img src="docs/images/api-docs.png" alt="Swagger API Documentation" style="width: 100%;">
+    <img src="docs/images/api-docs.png" alt="Swagger API Documentation" style="width: 100%; height: auto;">
 </div>
