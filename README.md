@@ -60,12 +60,26 @@ Below is an example of how HttpOnly cookies behave in the browser console:
 
 #### Without HttpOnly
 In this scenario, cookies can be accessed via JavaScript, exposing them to potential attacks:
-![Cookie without HttpOnly](docs/images/httpOnly-false.png)
+```javascript
+res.cookie('refreshToken', refreshToken, {
+  // httpOnly: true, // Uncommenting this line would enable HttpOnly, preventing JavaScript access
+  secure: NODE_ENV === 'production', // Use Secure only in production (HTTPS-only)
+  sameSite: 'strict', // Limits cookie to same-site requests, helping prevent CSRF
+  maxAge: WEEK, // Cookie expiration (e.g., one week)
+});
+```
 ![Cookie without HttpOnly](docs/images/cookie.png)
 
 #### With HttpOnly
 When HttpOnly is enabled, cookies are not accessible via JavaScript, providing better security:
-![Cookie with HttpOnly](docs/images/httpOnly-True.png)
+```javascript
+res.cookie('refreshToken', refreshToken, {
+  httpOnly: true, // The cookie is not accessible by client-side scripts
+  secure: NODE_ENV === 'production', // Use Secure only in production (HTTPS-only)
+  sameSite: 'strict', // Limits cookie to same-site requests, helping prevent CSRF
+  maxAge: WEEK, // Cookie expiration (e.g., one week)
+});
+```
 ![Cookie witt HttpOnly](docs/images/httpOnly-cookie.png)
 
 ### Cross-Origin Resource Sharing (CORS)
